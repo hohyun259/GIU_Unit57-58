@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#f5f3ee;
+  font-family:'Noto Sans KR',sans-serif;
+  color:#1a1a1a;
+  min-height:100vh;
+  padding:0;
+}
+.wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;gap:1.1rem}
+
+/* header */
+.header{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1rem}
+.hicon{width:42px;height:42px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.htitle{font-size:17px;font-weight:700;color:#1a1a1a}
+.hsub{font-size:12px;color:#888;margin-top:2px}
+
+/* score */
+.score-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sc{background:#fff;border:1px solid #e2ddd5;border-radius:10px;padding:.75rem 1rem;text-align:center}
+.sc-label{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;margin-bottom:4px;letter-spacing:.04em}
+.sc-val{font-size:24px;font-weight:700;color:#1a1a1a}
+.sc-val.g{color:#16a34a}.sc-val.r{color:#dc2626}
+.pbar-bg{height:5px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+.pbar{height:100%;background:#16a34a;border-radius:999px;transition:width .4s;width:0%}
+.pbar.w{background:#d97706}.pbar.b{background:#dc2626}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#e8e4dc;border-radius:10px;padding:4px}
+.tab{
+  padding:8px 4px;font-size:12px;font-family:'IBM Plex Mono',monospace;
+  border:none;background:transparent;color:#666;border-radius:7px;
+  cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:4px;
+  white-space:nowrap;
+}
+.tab.on{background:#fff;color:#1a1a1a;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* panel */
+.panel{display:none;flex-direction:column;gap:1rem}.panel.on{display:flex}
+
+/* card */
+.card{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1.25rem 1.4rem}
+.clabel{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.clabel svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+textarea,input[type=text]{
+  width:100%;border:1px solid #d1ccc4;border-radius:8px;
+  background:#faf9f7;color:#1a1a1a;
+  font-family:'Noto Sans KR',sans-serif;font-size:15px;line-height:1.6;
+  padding:.7rem 1rem;outline:none;resize:vertical;
+  transition:border-color .2s,box-shadow .2s;
+}
+textarea{min-height:75px}
+input[type=text]{min-height:36px;resize:none}
+textarea:focus,input[type=text]:focus{border-color:#92a8d1;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+textarea::placeholder,input::placeholder{color:#bbb}
+
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:.6rem}
+.chip{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#666;background:#f5f3ee;border:1px solid #e2ddd5;border-radius:6px;padding:4px 9px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover{background:#fef3c7;border-color:#d97706;color:#92400e}
+
+.btn-row{display:flex;justify-content:flex-end;margin-top:.75rem}
+.btn{
+  display:flex;align-items:center;gap:6px;
+  background:#1a1a1a;color:#fff;
+  border:none;border-radius:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;
+  padding:.6rem 1.25rem;cursor:pointer;transition:all .18s;
+}
+.btn:hover{background:#333}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* scanning */
+.scanning{display:none;align-items:center;gap:7px;padding:.55rem .9rem;background:#fefce8;border:1px solid #fde68a;border-radius:8px;margin-top:.6rem}
+.scanning.on{display:flex}
+.dot{width:6px;height:6px;border-radius:50%;background:#d97706;animation:blink .7s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:.13s}.dot:nth-child(3){animation-delay:.26s}
+@keyframes blink{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+.scan-txt{font-size:12px;font-family:'IBM Plex Mono',monospace;color:#92400e}
+
+/* result */
+.result{display:none}.result.on{display:block;animation:up .3s cubic-bezier(.16,1,.3,1)}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rstatus{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:4px 12px;border-radius:999px;margin-bottom:1rem}
+.rstatus.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.rstatus.err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.rstatus.safe{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+.rstatus svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.rblock{margin-bottom:1rem}
+.rblabel{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;color:#888;text-transform:uppercase;margin-bottom:5px}
+.corrected{font-size:15px;line-height:1.6;color:#1a1a1a;padding:.55rem .85rem;background:#faf9f7;border-left:3px solid #d97706;border-radius:0 7px 7px 0}
+.corrected mark{background:rgba(217,119,6,.18);color:#92400e;border-radius:3px;padding:0 2px;font-weight:600}
+.explain{font-size:13px;line-height:1.8;color:#555;padding:.7rem 1rem;background:#faf9f7;border-radius:8px;border:1px solid #e2ddd5;white-space:pre-line}
+
+/* history */
+.hist-empty{font-size:13px;color:#aaa;text-align:center;padding:2rem}
+.hist-item{padding:.7rem .9rem;border-bottom:1px solid #f0ece6;display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;border-radius:8px;transition:background .15s}
+.hist-item:last-child{border-bottom:none}
+.hist-item:hover{background:#faf9f7}
+.hdot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.hdot.ok{background:#16a34a}.hdot.err{background:#dc2626}.hdot.safe{background:#94a3b8}
+.hsent{font-size:13px;color:#1a1a1a;flex:1;line-height:1.5}
+.htag{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;white-space:nowrap}
+.clr-btn{margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;cursor:pointer;background:none;border:none;padding:0}
+.clr-btn:hover{color:#dc2626}
+
+/* batch */
+.batch-list{display:flex;flex-direction:column;gap:6px}
+.batch-row{display:flex;gap:6px;align-items:center}
+.del-btn{width:28px;height:28px;flex-shrink:0;border:1px solid #e2ddd5;background:transparent;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#aaa;transition:all .15s}
+.del-btn:hover{border-color:#fca5a5;color:#dc2626}
+.del-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:transparent;border:1px dashed #d1ccc4;border-radius:8px;color:#888;font-size:13px;padding:7px;cursor:pointer;width:100%;transition:all .15s;margin-top:4px}
+.add-btn:hover{border-color:#1a1a1a;color:#1a1a1a}
+.add-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* batch results */
+.batch-results{display:flex;flex-direction:column;gap:8px}
+.br-item{border:1px solid #e2ddd5;border-radius:10px;overflow:hidden;background:#fff}
+.br-head{display:flex;align-items:center;gap:8px;padding:.65rem 1rem;background:#faf9f7;border-bottom:1px solid #e2ddd5;cursor:pointer}
+.br-head:hover{background:#f5f3ee}
+.br-sent{font-size:13px;color:#1a1a1a;flex:1}
+.br-badge{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+.br-badge.ok{background:#dcfce7;color:#166534}.br-badge.err{background:#fee2e2;color:#991b1b}.br-badge.safe{background:#f1f5f9;color:#475569}
+.br-chev{font-size:13px;color:#aaa;transition:transform .2s}
+.br-body{padding:.75rem 1rem;font-size:13px;color:#555;line-height:1.8;display:none;white-space:pre-line}
+.br-body.on{display:block}
+.br-corrected{font-size:13px;color:#1a1a1a;padding:.4rem .75rem;background:#faf9f7;border-left:2.5px solid #d97706;border-radius:0 6px 6px 0;margin-bottom:.5rem}
+.br-corrected mark{background:rgba(217,119,6,.2);color:#92400e;border-radius:3px;padding:0 2px;font-weight:600}
+
+/* rules */
+.rule-item{display:flex;gap:.75rem;align-items:flex-start;padding:.75rem .5rem;border-bottom:1px solid #f0ece6}
+.rule-item:last-child{border-bottom:none}
+.rule-tag{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.rule-txt{font-size:13px;color:#555;line-height:1.75}
+.rule-txt code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:4px;color:#1a1a1a}
+.ok-t{color:#16a34a;font-weight:600}.bad-t{color:#dc2626;font-weight:600;text-decoration:line-through}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- header -->
+<div class="header">
+  <div class="hicon">📚</div>
+  <div>
+    <div class="htitle">Grammar Guard</div>
+    <div class="hsub">English Grammar in Use · Units 57–58 기말고사 문법 검사기</div>
+  </div>
+</div>
+
+<!-- score -->
+<div class="score-strip">
+  <div class="sc"><div class="sc-label">검사 횟수</div><div class="sc-val" id="s-total">0</div></div>
+  <div class="sc"><div class="sc-label">정답</div><div class="sc-val g" id="s-ok">0</div></div>
+  <div class="sc"><div class="sc-label">오류 발견</div><div class="sc-val r" id="s-err">0</div></div>
+</div>
+<div class="pbar-bg"><div class="pbar" id="pbar"></div></div>
+
+<!-- tabs -->
+<div class="tabs">
+  <button class="tab on" onclick="switchTab('single',this)">
+    <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>단일 문장
+  </button>
+  <button class="tab" onclick="switchTab('batch',this)">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12l2 2 4-4"/></svg>여러 문장
+  </button>
+  <button class="tab" onclick="switchTab('history',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>기록
+  </button>
+  <button class="tab" onclick="switchTab('guide',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>규칙 가이드
+  </button>
+</div>
+
+<!-- PANEL: single -->
+<div class="panel on" id="panel-single">
+  <div class="card">
+    <div class="clabel">
+      <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      문장 입력
+    </div>
+    <textarea id="inputSentence" placeholder="e.g.  I'd rather you drove home tonight." rows="3"></textarea>
+    <div class="chips" id="chip-area"></div>
+    <div class="scanning" id="scanning">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <span class="scan-txt">Units 57–58 기준으로 스캔 중…</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="checkBtn" onclick="checkGrammar()">
+        <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>문법 검사
+      </button>
+    </div>
+  </div>
+  <div class="card result" id="resultCard">
+    <div id="resultStatus" class="rstatus"></div>
+    <div class="rblock">
+      <div class="rblabel">교정 문장</div>
+      <div class="corrected" id="correctedSentence"></div>
+    </div>
+    <div class="rblock">
+      <div class="rblabel">교수님 족집게 해설</div>
+      <div class="explain" id="koreanExplanation"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: batch -->
+<div class="panel" id="panel-batch">
+  <div class="card">
+    <div class="clabel">
+      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      여러 문장 한 번에 검사
+    </div>
+    <div class="batch-list" id="batchList"></div>
+    <button class="add-btn" onclick="addBatchRow()">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>문장 추가
+    </button>
+    <div class="btn-row">
+      <button class="btn" id="batchBtn" onclick="checkBatch()">
+        <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>전체 검사
+      </button>
+    </div>
+  </div>
+  <div id="batchResults" class="batch-results" style="display:none"></div>
+</div>
+
+<!-- PANEL: history -->
+<div class="panel" id="panel-history">
+  <div class="card">
+    <div class="clabel" style="margin-bottom:0">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      검사 기록
+      <button class="clr-btn" onclick="clearHistory()">전체 삭제</button>
+    </div>
+    <div id="histList"><div class="hist-empty">아직 검사한 문장이 없습니다.</div></div>
+  </div>
+</div>
+
+<!-- PANEL: guide -->
+<div class="panel" id="panel-guide">
+  <div class="card">
+    <div class="clabel">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Unit 57–58 핵심 규칙
+    </div>
+    <div>
+      <div class="rule-item">
+        <span class="rule-tag">57A</span>
+        <div class="rule-txt"><strong>would rather + 동사원형</strong> — to부정사 불가<br><span class="ok-t">✓ I'd rather <code>stay</code></span> &nbsp; <span class="bad-t">I'd rather <code>to stay</code></span></div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57B</span>
+        <div class="rule-txt"><strong>prefer A to B</strong> — 'to'는 전치사 → 뒤에 동명사(-ing)<br><span class="ok-t">✓ prefer <code>driving</code> to <code>taking</code></span> &nbsp; <span class="bad-t">prefer <code>driving</code> to <code>take</code></span></div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57C</span>
+        <div class="rule-txt"><strong>prefer + 동명사 vs to부정사</strong> — 둘 다 가능<br><span class="ok-t">✓ prefer <code>going</code></span> / <span class="ok-t">prefer <code>to go</code></span></div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57D ⚠️</span>
+        <div class="rule-txt"><strong>I'd rather somebody + 동사원형</strong> — 과거형·3인칭형 모두 오답<br><span class="ok-t">✓ I'd rather you <code>drive</code></span> &nbsp; <span class="bad-t"><code>drove</code></span> &nbsp; <span class="bad-t"><code>drives</code></span></div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">58</span>
+        <div class="rule-txt"><strong>prefer to do rather than (do)</strong><br><span class="ok-t">✓ prefer <code>to drive</code> rather than <code>take</code></span></div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">58</span>
+        <div class="rule-txt"><strong>would rather do A than do B</strong><br><span class="ok-t">✓ I'd rather <code>walk</code> than <code>take</code> a taxi</span> — 두 동사 모두 원형</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const EXAMPLES = [
+  "I'd rather you drove home.",
+  "I'd rather you drive home.",
+  "I'd rather to stay here.",
+  "I prefer driving to taking the bus.",
+  "I prefer driving to take the bus.",
+  "I'd rather walk than taking a taxi.",
+  "I'd rather walk than take a taxi.",
+  "She prefers listening to music to watching TV.",
+  "I prefer to stay home rather than go out.",
+  "He'd rather you drives his car.",
+  "I'd rather not say anything.",
+  "She prefers cycling to running.",
+];
+
+let stats={total:0,ok:0,err:0}, history=[];
+
+(function buildChips(){
+  const area=document.getElementById('chip-area');
+  EXAMPLES.slice(0,8).forEach(ex=>{
+    const c=document.createElement('span');
+    c.className='chip';c.textContent=ex;
+    c.onclick=()=>{document.getElementById('inputSentence').value=ex};
+    area.appendChild(c);
+  });
+})();
+
+(function initBatch(){
+  EXAMPLES.slice(0,4).forEach(ex=>addBatchRow(ex));
+})();
+
+function addBatchRow(val=''){
+  const list=document.getElementById('batchList');
+  const row=document.createElement('div');row.className='batch-row';
+  const inp=document.createElement('input');inp.type='text';inp.placeholder='문장을 입력하세요…';inp.value=val;
+  const del=document.createElement('button');del.className='del-btn';del.setAttribute('aria-label','삭제');
+  del.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+  del.onclick=()=>row.remove();
+  row.appendChild(inp);row.appendChild(del);list.appendChild(row);
+}
+
+function switchTab(id,el){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+}
+
+function evaluateSentence(raw){
+  const s=raw.trim(), lo=s.toLowerCase();
+
+  if(/\bi'?d\s+rather\s+to\s+[a-z]/i.test(lo)){
+    return{ok:false,corrected:s.replace(/\b(rather)\s+to\s+/i,'$1 '),
+      explanation:"❌ Unit 57A: 'would rather' 뒤에는 to부정사 불가.\n'to'를 제거하고 동사원형만 쓰세요.\n\"I'd rather stay\" ✓ / \"I'd rather to stay\" ✗"};
+  }
+
+  const m57d=lo.match(/\bi'?d\s+rather\s+\b(you|he|she|they|we|it)\b\s+\b([a-z]+)\b/i);
+  if(m57d){
+    const verb=m57d[2];
+    const pastMap={drove:'drive',went:'go',did:'do',was:'be',were:'be',took:'take',came:'come',said:'say',got:'get',made:'make',knew:'know',told:'tell',gave:'give',found:'find',left:'leave',brought:'bring',kept:'keep',began:'begin',felt:'feel',stayed:'stay',walked:'walk',called:'call',ran:'run',ate:'eat',drank:'drink',wrote:'write',saw:'see'};
+    const thirdS=['does','goes','takes','comes','makes','knows','drives','stays','walks','works','plays','runs','eats','writes','sees','says','gets','calls','talks','looks'];
+    if(pastMap[verb]){
+      const base=pastMap[verb];
+      return{ok:false,corrected:s.replace(new RegExp('\\b'+verb+'\\b','i'),base),
+        explanation:`⚠️ Unit 57D 시험 단골 함정!\n"I'd rather somebody + 동사원형" 규칙에서\n과거형 '${verb}'는 오답 → 동사원형 '${base}'를 쓰세요.`};
+    }
+    if(thirdS.includes(verb)){
+      const base=verb.endsWith('oes')?verb.replace('oes','o'):verb.endsWith('es')?verb.replace(/e?s$/,''):verb.replace(/s$/,'');
+      return{ok:false,corrected:s.replace(new RegExp('\\b'+verb+'\\b','i'),base),
+        explanation:`⚠️ Unit 57D: 주어가 he/she여도 3인칭 단수형(-s/-es) 불가.\n"I'd rather he ${base}" 처럼 동사원형을 써야 합니다.`};
+    }
+  }
+
+  const gti=lo.match(/\bprefer\s+\w+ing\s+to\s+(take|go|do|drive|walk|run|eat|drink|stay|leave|make|get|come|buy|read|write|work|play|watch|listen|cycle|study)\b/i);
+  if(gti){
+    const bv=gti[1];
+    return{ok:false,corrected:s.replace(new RegExp('\\bto\\s+'+bv+'\\b','i'),'to '+bv+'ing'),
+      explanation:`❌ Unit 57B: "prefer A to B"의 'to'는 전치사.\n뒤에 동명사(-ing)가 와야 합니다.\n'to ${bv}' → 'to ${bv}ing'`};
+  }
+
+  const rt=lo.match(/\bi'?d\s+rather\s+\w+\s+than\s+(\w+ing)\b/i);
+  if(rt){
+    const g=rt[1],base=g.replace(/ing$/,'');
+    return{ok:false,corrected:s.replace(new RegExp('\\bthan\\s+'+g+'\\b','i'),'than '+base),
+      explanation:`❌ Unit 58: "would rather A than B"에서\nthan 뒤에는 동사원형을 써야 합니다.\n'than ${g}' → 'than ${base}'`};
+  }
+
+  const knownOk=[/\bi'?d\s+rather\s+not\b/i,/\bi'?d\s+rather\s+[a-z]+\s+than\s+[a-z]+\b/i,/\bi'?d\s+rather\s+(you|he|she|they|we)\s+[a-z]+\b/i,/\bprefer\s+\w+ing\s+to\s+\w+ing\b/i,/\bprefer\s+to\s+\w+\s+rather\s+than\s+[a-z]+\b/i,/\bwould\s+rather\s+[a-z]+\b/i,/\bprefer\s+\w+ing\b/i,/\bprefer\s+to\s+[a-z]+\b/i];
+  if(knownOk.some(p=>p.test(lo)))
+    return{ok:true,corrected:s,explanation:"✅ Units 57/58 기준에 맞는 올바른 문장입니다.\n시험장에서 자신 있게 쓰세요!"};
+  return{ok:null,corrected:s,explanation:"💡 Units 57–58 주요 트랩은 없는 것 같습니다.\n다른 문장도 테스트해 보세요."};
+}
+
+function diffHtml(orig,corr){
+  if(orig.toLowerCase()===corr.toLowerCase()) return corr;
+  const ow=orig.split(/\s+/),cw=corr.split(/\s+/);
+  return cw.map((w,i)=>w.toLowerCase()!==(ow[i]||'').toLowerCase()?`<mark>${w}</mark>`:w).join(' ');
+}
+
+function updateStats(res){
+  stats.total++;
+  if(res.ok===true) stats.ok++;
+  else if(res.ok===false) stats.err++;
+  document.getElementById('s-total').textContent=stats.total;
+  document.getElementById('s-ok').textContent=stats.ok;
+  document.getElementById('s-err').textContent=stats.err;
+  const pct=stats.total>0?Math.round(stats.ok/stats.total*100):0;
+  const bar=document.getElementById('pbar');
+  bar.style.width=pct+'%';
+  bar.className='pbar'+(pct>=80?'':pct>=50?' w':' b');
+}
+
+function pushHistory(sent,res){
+  history.unshift({sent,res});
+  const list=document.getElementById('histList');
+  if(list.querySelector('.hist-empty')) list.innerHTML='';
+  const item=document.createElement('div');item.className='hist-item';
+  const dc=res.ok===true?'ok':res.ok===false?'err':'safe';
+  const tag=res.ok===true?'정답':res.ok===false?'오류':'안전';
+  item.innerHTML=`<div class="hdot ${dc}"></div><div class="hsent">${sent}</div><div class="htag">${tag}</div>`;
+  item.onclick=()=>{
+    document.getElementById('inputSentence').value=sent;
+    switchTab('single',document.querySelector('.tab'));
+    document.querySelector('.tab').classList.add('on');
+    showResult(sent,res);
+  };
+  list.insertBefore(item,list.firstChild);
+}
+
+function showResult(input,res){
+  const card=document.getElementById('resultCard');
+  const st=document.getElementById('resultStatus');
+  st.className='rstatus';
+  if(res.ok===false){
+    st.classList.add('err');
+    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>오류 발견';
+  } else if(res.ok===true){
+    st.classList.add('ok');
+    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M20 6L9 17l-5-5"/></svg>정답';
+  } else {
+    st.classList.add('safe');
+    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>안전 구역';
+  }
+  document.getElementById('correctedSentence').innerHTML=diffHtml(input,res.corrected);
+  document.getElementById('koreanExplanation').textContent=res.explanation;
+  card.classList.add('on');
+}
+
+function checkGrammar(){
+  const input=document.getElementById('inputSentence').value.trim();
+  if(!input) return;
+  const btn=document.getElementById('checkBtn'),sc=document.getElementById('scanning'),card=document.getElementById('resultCard');
+  card.classList.remove('on');sc.classList.add('on');btn.disabled=true;
+  setTimeout(()=>{
+    sc.classList.remove('on');btn.disabled=false;
+    const res=evaluateSentence(input);
+    updateStats(res);pushHistory(input,res);showResult(input,res);
+  },750);
+}
+
+function checkBatch(){
+  const inputs=[...document.querySelectorAll('#batchList input')].map(i=>i.value.trim()).filter(Boolean);
+  if(!inputs.length) return;
+  const btn=document.getElementById('batchBtn');btn.disabled=true;
+  const container=document.getElementById('batchResults');container.style.display='flex';container.innerHTML='';
+  setTimeout(()=>{
+    btn.disabled=false;
+    inputs.forEach(sent=>{
+      const res=evaluateSentence(sent);updateStats(res);pushHistory(sent,res);
+      const dc=res.ok===true?'ok':res.ok===false?'err':'safe';
+      const tag=res.ok===true?'정답':res.ok===false?'오류':'안전';
+      const item=document.createElement('div');item.className='br-item';
+      item.innerHTML=`
+        <div class="br-head" onclick="toggleBR(this)">
+          <div class="hdot ${dc}" style="flex-shrink:0;margin-top:0"></div>
+          <div class="br-sent">${sent}</div>
+          <span class="br-badge ${dc}">${tag}</span>
+          <span class="br-chev">▾</span>
+        </div>
+        <div class="br-body">
+          <div class="rblabel" style="margin-bottom:4px">교정 문장</div>
+          <div class="br-corrected">${diffHtml(sent,res.corrected)}</div>
+          ${res.explanation}
+        </div>`;
+      container.appendChild(item);
+    });
+    container.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },900);
+}
+
+function toggleBR(h){
+  const body=h.nextElementSibling,chev=h.querySelector('.br-chev');
+  body.classList.toggle('on');
+  if(chev) chev.style.transform=body.classList.contains('on')?'rotate(180deg)':'';
+}
+
+function clearHistory(){
+  history=[];document.getElementById('histList').innerHTML='<div class="hist-empty">아직 검사한 문장이 없습니다.</div>';
+}
+
+document.getElementById('inputSentence').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey) checkGrammar()});
+</script>
+</body>
+</html>
