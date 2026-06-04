@@ -305,9 +305,6 @@ textarea::placeholder{color:#bbb}
    예시 문장 목록 (정답/오류 섞어서 학습 효과)
 ════════════════════════════════════════════════════════════════ */
 const EXAMPLES=[
-  // 58B
-  {s:"She made herself sick by not eating well.",  unit:"58B"},
-  {s:"She made herself sick not by eating well.",  unit:"58B"},
   // 57A
   {s:"I prefer living in the country.",          unit:"57A"},
   {s:"I prefer to live in the country.",         unit:"57A"},
@@ -404,15 +401,6 @@ function evaluateSentence(raw){
     const bv=gti[1], gerund=toGerund(bv);
     return{ok:false,corrected:s.replace(new RegExp('\\bto\\s+'+bv+'\\b','i'),'to '+gerund),
       explanation:`❌ Unit 58C: "prefer A to B"의 'to'는 전치사.\n뒤에 동명사(-ing)가 와야 합니다.\n'to ${bv}' → 'to ${gerund}'`};
-  }
-
-  // [58B] not by -ing → by not -ing
-  // 교재 예문: "She made herself sick by not eating well."
-  // "not by -ing" 순서는 오류 — not은 전치사구 안에 위치해야 함
-  if(/\bnot\s+by\s+[a-z]+ing\b/i.test(lo) && !/\bnot\s+only\s+by\b/i.test(lo)){
-    const corrected=s.replace(/\bnot\s+by\s+([a-z]+ing)\b/i,'by not $1');
-    return{ok:false, corrected,
-      explanation:`❌ Unit 58B: 'not'은 전치사구 안에 위치해야 합니다.\n'not by -ing' → 'by not -ing'\n예) "by not eating well" ✓  /  "not by eating well" ✗`};
   }
 
   // [57A] prefer to do rather than to do
@@ -597,12 +585,7 @@ D. I'd rather somebody DO — the primary rule is subjunctive = base form.
    - base form is the course standard (교재 및 수업 기준)
    - past tense is used informally in native speech but NOT accepted in 영어문법1
 
-UNIT 58B RULE:
-When using "by -ing" to describe how something happens, negation must go inside the prepositional phrase.
-Correct order: "by not -ing" ✓
-Wrong order: "not by -ing" ✗
-e.g. "She made herself sick by not eating well." ✓ / "She made herself sick not by eating well." ✗
-Exception: "not only by -ing" is a valid emphasis structure — do NOT flag this as an error.
+UNIT 58C RULE:
 When "to" is a preposition, the following verb must end in -ing.
 e.g. "I prefer driving to taking" ✓ / "I prefer driving to take" ✗
 
