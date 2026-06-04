@@ -7,144 +7,101 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:#f5f3ee;
-  font-family:'Noto Sans KR',sans-serif;
-  color:#1a1a1a;
-  min-height:100vh;
-  padding:0;
-}
-.wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;gap:1.1rem}
+body{background:#f5f3ee;font-family:'Noto Sans KR',sans-serif;color:#1a1a1a;min-height:100vh;padding:0}
+.wrap{max-width:680px;margin:0 auto;padding:1.25rem 1rem 3rem;display:flex;flex-direction:column;gap:1rem}
 
 /* header */
-.header{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1rem}
-.hicon{width:42px;height:42px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.htitle{font-size:17px;font-weight:700;color:#1a1a1a}
-.hsub{font-size:12px;color:#888;margin-top:2px}
+.header{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.9rem}
+.hicon{width:40px;height:40px;border-radius:10px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.htitle{font-size:16px;font-weight:700}
+.hsub{font-size:11px;color:#888;margin-top:2px}
 
 /* score */
-.score-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.sc{background:#fff;border:1px solid #e2ddd5;border-radius:10px;padding:.75rem 1rem;text-align:center}
-.sc-label{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;margin-bottom:4px;letter-spacing:.04em}
-.sc-val{font-size:24px;font-weight:700;color:#1a1a1a}
+.score-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sc{background:#fff;border:1px solid #e2ddd5;border-radius:10px;padding:.65rem 1rem;text-align:center}
+.sc-label{font-size:10px;font-family:'IBM Plex Mono',monospace;color:#888;margin-bottom:3px;letter-spacing:.04em}
+.sc-val{font-size:22px;font-weight:700}
 .sc-val.g{color:#16a34a}.sc-val.r{color:#dc2626}
-.pbar-bg{height:5px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+.pbar-bg{height:4px;background:#e5e7eb;border-radius:999px;overflow:hidden}
 .pbar{height:100%;background:#16a34a;border-radius:999px;transition:width .4s;width:0%}
 .pbar.w{background:#d97706}.pbar.b{background:#dc2626}
 
 /* tabs */
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#e8e4dc;border-radius:10px;padding:4px}
-.tab{
-  padding:8px 4px;font-size:12px;font-family:'IBM Plex Mono',monospace;
-  border:none;background:transparent;color:#666;border-radius:7px;
-  cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:4px;
-  white-space:nowrap;
-}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:#e8e4dc;border-radius:10px;padding:3px}
+.tab{padding:7px 2px;font-size:11px;font-family:'IBM Plex Mono',monospace;border:none;background:transparent;color:#666;border-radius:7px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2}
+.tab .tnum{font-size:15px;line-height:1}
 .tab.on{background:#fff;color:#1a1a1a;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.tab svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-/* panel */
-.panel{display:none;flex-direction:column;gap:1rem}.panel.on{display:flex}
+/* panels */
+.panel{display:none;flex-direction:column;gap:.9rem}.panel.on{display:flex}
 
 /* card */
-.card{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1.25rem 1.4rem}
-.clabel{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
-.clabel svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card{background:#fff;border:1px solid #e2ddd5;border-radius:14px;padding:1.1rem 1.25rem}
+.clabel{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.07em;color:#888;text-transform:uppercase;margin-bottom:.7rem}
 
-textarea,input[type=text]{
-  width:100%;border:1px solid #d1ccc4;border-radius:8px;
-  background:#faf9f7;color:#1a1a1a;
-  font-family:'Noto Sans KR',sans-serif;font-size:15px;line-height:1.6;
-  padding:.7rem 1rem;outline:none;resize:vertical;
-  transition:border-color .2s,box-shadow .2s;
+/* ── PANEL 1: 규칙 가이드 ── */
+.rule-section{margin-bottom:.25rem}
+.rule-section-title{font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:.5rem;padding:.35rem .6rem;background:#fef3c7;border-radius:6px;display:inline-block}
+.rule-item{display:flex;gap:.65rem;align-items:flex-start;padding:.6rem .4rem;border-bottom:1px solid #f0ece6}
+.rule-item:last-child{border-bottom:none}
+.rule-tag{font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.rule-txt{font-size:12.5px;color:#444;line-height:1.75}
+.rule-txt code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:#f1f5f9;padding:1px 4px;border-radius:4px;color:#1a1a1a}
+.ok-t{color:#16a34a;font-weight:600}.bad-t{color:#dc2626;font-weight:600;text-decoration:line-through}
+.rule-note{font-size:11px;color:#888;margin-top:2px;font-style:italic}
+
+/* ── PANEL 2: 예시 문장 ── */
+.ex-grid{display:flex;flex-direction:column;gap:6px}
+.ex-item{
+  border:1px solid #e2ddd5;border-radius:9px;overflow:hidden;
+  cursor:pointer;transition:border-color .15s;
 }
-textarea{min-height:75px}
-input[type=text]{min-height:36px;resize:none}
-textarea:focus,input[type=text]:focus{border-color:#92a8d1;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
-textarea::placeholder,input::placeholder{color:#bbb}
+.ex-item:hover{border-color:#d97706}
+.ex-head{display:flex;align-items:center;gap:8px;padding:.6rem .9rem;background:#faf9f7}
+.ex-sent{font-size:13px;color:#1a1a1a;flex:1;font-family:'IBM Plex Mono',monospace}
+.ex-arrow{font-size:12px;color:#bbb;transition:transform .2s}
+.ex-body{display:none;padding:.7rem 1rem;border-top:1px solid #f0ece6;background:#fff}
+.ex-body.on{display:block;animation:up .25s ease}
+.rstatus{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:3px 10px;border-radius:999px;margin-bottom:.65rem}
+.rstatus.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.rstatus.err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.rstatus.safe{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+.rblabel{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;color:#888;text-transform:uppercase;margin-bottom:4px}
+.corrected{font-size:13px;line-height:1.6;color:#1a1a1a;padding:.5rem .75rem;background:#faf9f7;border-left:3px solid #d97706;border-radius:0 7px 7px 0;margin-bottom:.6rem}
+.corrected mark{background:rgba(217,119,6,.18);color:#92400e;border-radius:3px;padding:0 2px;font-weight:600}
+.explain{font-size:12px;line-height:1.8;color:#555;padding:.6rem .85rem;background:#faf9f7;border-radius:7px;border:1px solid #e2ddd5;white-space:pre-line}
+.ex-rule-ref{font-size:11px;color:#aaa;font-family:'IBM Plex Mono',monospace;margin-top:.4rem}
 
-.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:.6rem}
-.chip{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#666;background:#f5f3ee;border:1px solid #e2ddd5;border-radius:6px;padding:4px 9px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.chip:hover{background:#fef3c7;border-color:#d97706;color:#92400e}
-
-.btn-row{display:flex;justify-content:flex-end;margin-top:.75rem}
-.btn{
-  display:flex;align-items:center;gap:6px;
-  background:#1a1a1a;color:#fff;
-  border:none;border-radius:8px;
-  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;
-  padding:.6rem 1.25rem;cursor:pointer;transition:all .18s;
-}
-.btn:hover{background:#333}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-/* scanning */
-.scanning{display:none;align-items:center;gap:7px;padding:.55rem .9rem;background:#fefce8;border:1px solid #fde68a;border-radius:8px;margin-top:.6rem}
+/* ── PANEL 3: 직접 입력 ── */
+textarea{width:100%;border:1px solid #d1ccc4;border-radius:8px;background:#faf9f7;color:#1a1a1a;font-family:'Noto Sans KR',sans-serif;font-size:15px;line-height:1.6;padding:.7rem 1rem;outline:none;resize:vertical;min-height:75px;transition:border-color .2s,box-shadow .2s}
+textarea:focus{border-color:#92a8d1;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+textarea::placeholder{color:#bbb}
+.btn-row{display:flex;justify-content:flex-end;margin-top:.65rem}
+.btn{display:flex;align-items:center;gap:6px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;padding:.55rem 1.15rem;cursor:pointer;transition:all .18s}
+.btn:hover{background:#333}.btn:active{transform:scale(.98)}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scanning{display:none;align-items:center;gap:7px;padding:.5rem .85rem;background:#fefce8;border:1px solid #fde68a;border-radius:8px;margin-top:.6rem}
 .scanning.on{display:flex}
 .dot{width:6px;height:6px;border-radius:50%;background:#d97706;animation:blink .7s ease-in-out infinite}
 .dot:nth-child(2){animation-delay:.13s}.dot:nth-child(3){animation-delay:.26s}
 @keyframes blink{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
 .scan-txt{font-size:12px;font-family:'IBM Plex Mono',monospace;color:#92400e}
-
-/* result */
-.result{display:none}.result.on{display:block;animation:up .3s cubic-bezier(.16,1,.3,1)}
+.result-card{display:none}.result-card.on{display:block;animation:up .3s cubic-bezier(.16,1,.3,1)}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.rstatus{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:4px 12px;border-radius:999px;margin-bottom:1rem}
-.rstatus.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
-.rstatus.err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-.rstatus.safe{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
-.rstatus svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.rblock{margin-bottom:1rem}
-.rblabel{font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;color:#888;text-transform:uppercase;margin-bottom:5px}
-.corrected{font-size:15px;line-height:1.6;color:#1a1a1a;padding:.55rem .85rem;background:#faf9f7;border-left:3px solid #d97706;border-radius:0 7px 7px 0}
-.corrected mark{background:rgba(217,119,6,.18);color:#92400e;border-radius:3px;padding:0 2px;font-weight:600}
-.explain{font-size:13px;line-height:1.8;color:#555;padding:.7rem 1rem;background:#faf9f7;border-radius:8px;border:1px solid #e2ddd5;white-space:pre-line}
 
-/* history */
-.hist-empty{font-size:13px;color:#aaa;text-align:center;padding:2rem}
-.hist-item{padding:.7rem .9rem;border-bottom:1px solid #f0ece6;display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;border-radius:8px;transition:background .15s}
-.hist-item:last-child{border-bottom:none}
-.hist-item:hover{background:#faf9f7}
-.hdot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.hdot.ok{background:#16a34a}.hdot.err{background:#dc2626}.hdot.safe{background:#94a3b8}
-.hsent{font-size:13px;color:#1a1a1a;flex:1;line-height:1.5}
-.htag{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;white-space:nowrap}
-.clr-btn{margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#888;cursor:pointer;background:none;border:none;padding:0}
+/* ── PANEL 4: 오답노트 ── */
+.note-empty{font-size:13px;color:#aaa;text-align:center;padding:2rem;line-height:1.8}
+.note-item{border:1px solid #fca5a5;border-radius:10px;overflow:hidden;background:#fff;cursor:pointer}
+.note-head{display:flex;align-items:flex-start;gap:8px;padding:.65rem 1rem;background:#fff9f9}
+.note-head:hover{background:#fff3f3}
+.note-num{font-size:10px;font-family:'IBM Plex Mono',monospace;color:#dc2626;background:#fee2e2;padding:2px 7px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.note-sent{font-size:13px;color:#1a1a1a;flex:1;line-height:1.5}
+.note-chev{font-size:12px;color:#bbb;transition:transform .2s;flex-shrink:0;margin-top:2px}
+.note-body{display:none;padding:.7rem 1rem;border-top:1px solid #fee2e2;background:#fff}
+.note-body.on{display:block}
+.clr-btn{margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#aaa;cursor:pointer;background:none;border:none;padding:0;transition:color .15s}
 .clr-btn:hover{color:#dc2626}
-
-/* batch */
-.batch-list{display:flex;flex-direction:column;gap:6px}
-.batch-row{display:flex;gap:6px;align-items:center}
-.del-btn{width:28px;height:28px;flex-shrink:0;border:1px solid #e2ddd5;background:transparent;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#aaa;transition:all .15s}
-.del-btn:hover{border-color:#fca5a5;color:#dc2626}
-.del-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:transparent;border:1px dashed #d1ccc4;border-radius:8px;color:#888;font-size:13px;padding:7px;cursor:pointer;width:100%;transition:all .15s;margin-top:4px}
-.add-btn:hover{border-color:#1a1a1a;color:#1a1a1a}
-.add-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-/* batch results */
-.batch-results{display:flex;flex-direction:column;gap:8px}
-.br-item{border:1px solid #e2ddd5;border-radius:10px;overflow:hidden;background:#fff}
-.br-head{display:flex;align-items:center;gap:8px;padding:.65rem 1rem;background:#faf9f7;border-bottom:1px solid #e2ddd5;cursor:pointer}
-.br-head:hover{background:#f5f3ee}
-.br-sent{font-size:13px;color:#1a1a1a;flex:1}
-.br-badge{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0}
-.br-badge.ok{background:#dcfce7;color:#166534}.br-badge.err{background:#fee2e2;color:#991b1b}.br-badge.safe{background:#f1f5f9;color:#475569}
-.br-chev{font-size:13px;color:#aaa;transition:transform .2s}
-.br-body{padding:.75rem 1rem;font-size:13px;color:#555;line-height:1.8;display:none;white-space:pre-line}
-.br-body.on{display:block}
-.br-corrected{font-size:13px;color:#1a1a1a;padding:.4rem .75rem;background:#faf9f7;border-left:2.5px solid #d97706;border-radius:0 6px 6px 0;margin-bottom:.5rem}
-.br-corrected mark{background:rgba(217,119,6,.2);color:#92400e;border-radius:3px;padding:0 2px;font-weight:600}
-
-/* rules */
-.rule-item{display:flex;gap:.75rem;align-items:flex-start;padding:.75rem .5rem;border-bottom:1px solid #f0ece6}
-.rule-item:last-child{border-bottom:none}
-.rule-tag{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;background:#fef3c7;color:#92400e;padding:2px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0;margin-top:1px}
-.rule-txt{font-size:13px;color:#555;line-height:1.75}
-.rule-txt code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:4px;color:#1a1a1a}
-.ok-t{color:#16a34a;font-weight:600}.bad-t{color:#dc2626;font-weight:600;text-decoration:line-through}
+.note-count{font-size:11px;font-family:'IBM Plex Mono',monospace;color:#dc2626;background:#fee2e2;padding:2px 8px;border-radius:999px;margin-left:6px}
 </style>
 </head>
 <body>
@@ -161,7 +118,7 @@ textarea::placeholder,input::placeholder{color:#bbb}
 
 <!-- score -->
 <div class="score-strip">
-  <div class="sc"><div class="sc-label">검사 횟수</div><div class="sc-val" id="s-total">0</div></div>
+  <div class="sc"><div class="sc-label">전체 검사</div><div class="sc-val" id="s-total">0</div></div>
   <div class="sc"><div class="sc-label">정답</div><div class="sc-val g" id="s-ok">0</div></div>
   <div class="sc"><div class="sc-label">오류 발견</div><div class="sc-val r" id="s-err">0</div></div>
 </div>
@@ -169,226 +126,316 @@ textarea::placeholder,input::placeholder{color:#bbb}
 
 <!-- tabs -->
 <div class="tabs">
-  <button class="tab on" onclick="switchTab('single',this)">
-    <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>단일 문장
-  </button>
-  <button class="tab" onclick="switchTab('batch',this)">
-    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12l2 2 4-4"/></svg>여러 문장
-  </button>
-  <button class="tab" onclick="switchTab('history',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>기록
-  </button>
-  <button class="tab" onclick="switchTab('guide',this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>규칙 가이드
-  </button>
+  <button class="tab on" onclick="switchTab('guide',this)"><span class="tnum">📖</span>규칙 가이드</button>
+  <button class="tab"    onclick="switchTab('examples',this)"><span class="tnum">✏️</span>예시 문장</button>
+  <button class="tab"    onclick="switchTab('input',this)"><span class="tnum">⌨️</span>직접 입력</button>
+  <button class="tab"    onclick="switchTab('notes',this)"><span class="tnum">❌</span>오답노트<span class="note-count" id="note-count" style="display:none">0</span></button>
 </div>
 
-<!-- PANEL: single -->
-<div class="panel on" id="panel-single">
+<!-- ══ PANEL 1: 규칙 가이드 ══════════════════════════════════════ -->
+<div class="panel on" id="panel-guide">
+
   <div class="card">
-    <div class="clabel">
-      <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      문장 입력
+    <div class="clabel">Unit 57 · prefer and would rather</div>
+
+    <div class="rule-section">
+      <div class="rule-section-title">57A — prefer to / prefer -ing (일반적 선호)</div>
+      <div class="rule-item">
+        <span class="rule-tag">57A</span>
+        <div class="rule-txt">
+          <code>prefer to do</code> 또는 <code>prefer doing</code> — 둘 다 가능<br>
+          <span class="ok-t">✓ I prefer <code>to live</code> in the country.</span><br>
+          <span class="ok-t">✓ I prefer <code>living</code> in the country.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57A</span>
+        <div class="rule-txt">
+          <code>prefer -ing to -ing</code> — to는 전치사 → 뒤에 반드시 동명사<br>
+          <span class="ok-t">✓ I prefer <code>driving</code> to <code>taking</code> the train.</span><br>
+          <span class="bad-t">✗ I prefer driving to <code>take</code> the train.</span>
+          <div class="rule-note">→ Unit 58C: 전치사 to 뒤에는 항상 -ing</div>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57A</span>
+        <div class="rule-txt">
+          <code>prefer -ing rather than (-ing)</code> — rather than 뒤 동명사 또는 원형 모두 가능<br>
+          <span class="ok-t">✓ I prefer <code>driving</code> rather than <code>taking</code> the train.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57A</span>
+        <div class="rule-txt">
+          <code>prefer to do rather than (do)</code> — rather than 뒤 to 없이 원형<br>
+          <span class="ok-t">✓ I prefer <code>to drive</code> rather than <code>take</code> the train.</span><br>
+          <span class="bad-t">✗ I prefer to drive rather than <code>to take</code> the train.</span>
+        </div>
+      </div>
     </div>
-    <textarea id="inputSentence" placeholder="e.g.  I'd rather you drove home tonight." rows="3"></textarea>
-    <div class="chips" id="chip-area"></div>
+
+    <div class="rule-section">
+      <div class="rule-section-title">57B — would prefer (특정 상황의 선호)</div>
+      <div class="rule-item">
+        <span class="rule-tag">57B</span>
+        <div class="rule-txt">
+          <code>would prefer to do</code> — 동명사(-ing) 불가<br>
+          <span class="ok-t">✓ I'd prefer <code>to drive</code>.</span><br>
+          <span class="bad-t">✗ I'd prefer <code>driving</code>.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57B</span>
+        <div class="rule-txt">
+          <code>I'd prefer to do rather than (do)</code><br>
+          <span class="ok-t">✓ I'd prefer <code>to stay</code> rather than <code>go</code> out.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-section">
+      <div class="rule-section-title">57C — would rather (I'd rather …)</div>
+      <div class="rule-item">
+        <span class="rule-tag">57C</span>
+        <div class="rule-txt">
+          <code>I'd rather + 동사원형</code> — to부정사 불가<br>
+          <span class="ok-t">✓ I'd rather <code>drive</code>.</span><br>
+          <span class="bad-t">✗ I'd rather <code>to drive</code>.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57C</span>
+        <div class="rule-txt">
+          부정: <code>I'd rather not + 동사원형</code><br>
+          <span class="ok-t">✓ I'd rather <code>not go</code> out tonight.</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <span class="rule-tag">57C</span>
+        <div class="rule-txt">
+          <code>I'd rather do A than do B</code> — than 뒤도 동사원형<br>
+          <span class="ok-t">✓ I'd rather <code>stay</code> than <code>go</code>.</span><br>
+          <span class="bad-t">✗ I'd rather stay than <code>going</code>.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-section">
+      <div class="rule-section-title">57D — I'd rather somebody do something ⚠️ 시험 단골</div>
+      <div class="rule-item">
+        <span class="rule-tag">57D</span>
+        <div class="rule-txt">
+          다른 사람에게 원할 때: <code>I'd rather + 사람 + 동사원형(subjunctive)</code><br>
+          <span class="ok-t">✓ I'd rather you <code>drive</code>.</span><br>
+          <span class="bad-t">✗ I'd rather you <code>drove</code>.</span> &nbsp;
+          <span class="bad-t">✗ I'd rather you <code>drives</code>.</span>
+          <div class="rule-note">과거형·3인칭 단수형 모두 오답 — subjunctive = base form</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="clabel">Unit 58C · 전치사 to + -ing</div>
+    <div class="rule-item">
+      <span class="rule-tag">58C</span>
+      <div class="rule-txt">
+        <code>to</code>가 전치사일 때 뒤에 오는 동사는 반드시 <code>-ing</code><br>
+        <span class="ok-t">✓ I prefer driving to <code>taking</code> the train.</span><br>
+        <span class="ok-t">✓ I'm looking forward to <code>seeing</code> you.</span><br>
+        <span class="bad-t">✗ I prefer driving to <code>take</code> the train.</span>
+        <div class="rule-note">to부정사의 to(= to + 원형)와 혼동 금지</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANEL 2: 예시 문장 ══════════════════════════════════════ -->
+<div class="panel" id="panel-examples">
+  <div class="card">
+    <div class="clabel">예시 문장 — 클릭해서 정답·오류 확인</div>
+    <div class="ex-grid" id="exGrid"></div>
+  </div>
+</div>
+
+<!-- ══ PANEL 3: 직접 입력 (Claude API) ══════════════════════════ -->
+<div class="panel" id="panel-input">
+  <div class="card">
+    <div class="clabel">AI 문법 검사 · Claude 기반</div>
+    <p style="font-size:12px;color:#888;margin-bottom:.75rem;line-height:1.7">Unit 57/58 교재 기준으로 어떤 문장이든 자유롭게 입력하세요.<br>AI가 맥락까지 고려해서 판단하고 한국어로 해설해드립니다.</p>
+    <textarea id="inputSentence" placeholder="e.g.  I'd rather you not have gone there." rows="3"></textarea>
     <div class="scanning" id="scanning">
       <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      <span class="scan-txt">Units 57–58 기준으로 스캔 중…</span>
+      <span class="scan-txt">Claude가 Unit 57–58 기준으로 분석 중…</span>
     </div>
     <div class="btn-row">
-      <button class="btn" id="checkBtn" onclick="checkGrammar()">
-        <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>문법 검사
+      <button class="btn" id="checkBtn" onclick="checkGrammarAI()">
+        <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>AI 검사
       </button>
     </div>
   </div>
-  <div class="card result" id="resultCard">
+  <div class="card result-card" id="resultCard">
     <div id="resultStatus" class="rstatus"></div>
-    <div class="rblock">
+    <div style="margin-bottom:.8rem">
       <div class="rblabel">교정 문장</div>
       <div class="corrected" id="correctedSentence"></div>
     </div>
-    <div class="rblock">
-      <div class="rblabel">교수님 족집게 해설</div>
+    <div>
+      <div class="rblabel">AI 해설</div>
       <div class="explain" id="koreanExplanation"></div>
     </div>
   </div>
 </div>
 
-<!-- PANEL: batch -->
-<div class="panel" id="panel-batch">
+<!-- ══ PANEL 4: 오답노트 ══════════════════════════════════════ -->
+<div class="panel" id="panel-notes">
   <div class="card">
-    <div class="clabel">
-      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      여러 문장 한 번에 검사
+    <div class="clabel" style="margin-bottom:0;display:flex;align-items:center">
+      오답노트 — 오류 발견된 문장만 모음
+      <button class="clr-btn" onclick="clearNotes()">전체 삭제</button>
     </div>
-    <div class="batch-list" id="batchList"></div>
-    <button class="add-btn" onclick="addBatchRow()">
-      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>문장 추가
-    </button>
-    <div class="btn-row">
-      <button class="btn" id="batchBtn" onclick="checkBatch()">
-        <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>전체 검사
-      </button>
-    </div>
-  </div>
-  <div id="batchResults" class="batch-results" style="display:none"></div>
-</div>
-
-<!-- PANEL: history -->
-<div class="panel" id="panel-history">
-  <div class="card">
-    <div class="clabel" style="margin-bottom:0">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      검사 기록
-      <button class="clr-btn" onclick="clearHistory()">전체 삭제</button>
-    </div>
-    <div id="histList"><div class="hist-empty">아직 검사한 문장이 없습니다.</div></div>
+    <div id="noteList"><div class="note-empty">아직 오류 문장이 없습니다. 😊<br>예시 문장이나 직접 입력에서 검사해 보세요.</div></div>
   </div>
 </div>
 
-<!-- PANEL: guide -->
-<div class="panel" id="panel-guide">
-  <div class="card">
-    <div class="clabel">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      Unit 57–58 핵심 규칙
-    </div>
-    <div>
-      <div class="rule-item">
-        <span class="rule-tag">57A</span>
-        <div class="rule-txt"><strong>would rather + 동사원형</strong> — to부정사 불가<br><span class="ok-t">✓ I'd rather <code>stay</code></span> &nbsp; <span class="bad-t">I'd rather <code>to stay</code></span></div>
-      </div>
-      <div class="rule-item">
-        <span class="rule-tag">57B</span>
-        <div class="rule-txt"><strong>prefer A to B</strong> — 'to'는 전치사 → 뒤에 동명사(-ing)<br><span class="ok-t">✓ prefer <code>driving</code> to <code>taking</code></span> &nbsp; <span class="bad-t">prefer <code>driving</code> to <code>take</code></span></div>
-      </div>
-      <div class="rule-item">
-        <span class="rule-tag">57C</span>
-        <div class="rule-txt"><strong>prefer + 동명사 vs to부정사</strong> — 둘 다 가능<br><span class="ok-t">✓ prefer <code>going</code></span> / <span class="ok-t">prefer <code>to go</code></span></div>
-      </div>
-      <div class="rule-item">
-        <span class="rule-tag">57D ⚠️</span>
-        <div class="rule-txt"><strong>I'd rather somebody + 동사원형</strong> — 과거형·3인칭형 모두 오답<br><span class="ok-t">✓ I'd rather you <code>drive</code></span> &nbsp; <span class="bad-t"><code>drove</code></span> &nbsp; <span class="bad-t"><code>drives</code></span></div>
-      </div>
-      <div class="rule-item">
-        <span class="rule-tag">58</span>
-        <div class="rule-txt"><strong>prefer to do rather than (do)</strong><br><span class="ok-t">✓ prefer <code>to drive</code> rather than <code>take</code></span></div>
-      </div>
-      <div class="rule-item">
-        <span class="rule-tag">58</span>
-        <div class="rule-txt"><strong>would rather do A than do B</strong><br><span class="ok-t">✓ I'd rather <code>walk</code> than <code>take</code> a taxi</span> — 두 동사 모두 원형</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
+</div><!-- /wrap -->
 
 <script>
-const EXAMPLES = [
-  "I'd rather you drove home.",
-  "I'd rather you drive home.",
-  "I'd rather to stay here.",
-  "I prefer driving to taking the bus.",
-  "I prefer driving to take the bus.",
-  "I'd rather walk than taking a taxi.",
-  "I'd rather walk than take a taxi.",
-  "She prefers listening to music to watching TV.",
-  "I prefer to stay home rather than go out.",
-  "He'd rather you drives his car.",
-  "I'd rather not say anything.",
-  "She prefers cycling to running.",
+/* ════════════════════════════════════════════════════════════════
+   예시 문장 목록 (정답/오류 섞어서 학습 효과)
+════════════════════════════════════════════════════════════════ */
+const EXAMPLES=[
+  // 57A
+  {s:"I prefer living in the country.",          unit:"57A"},
+  {s:"I prefer to live in the country.",         unit:"57A"},
+  {s:"I prefer driving to taking the train.",    unit:"57A"},
+  {s:"I prefer driving to take the train.",      unit:"57A"},
+  {s:"I prefer driving rather than taking.",     unit:"57A"},
+  {s:"I prefer to drive rather than take.",      unit:"57A"},
+  {s:"I prefer to drive rather than to take.",   unit:"57A"},
+  // 57B
+  {s:"I'd prefer to drive.",                     unit:"57B"},
+  {s:"I'd prefer driving.",                      unit:"57B"},
+  {s:"I'd prefer to stay rather than go out.",   unit:"57B"},
+  // 57C
+  {s:"I'd rather drive.",                        unit:"57C"},
+  {s:"I'd rather to drive.",                     unit:"57C"},
+  {s:"I'd rather not go out tonight.",           unit:"57C"},
+  {s:"I'd rather stay than go.",                 unit:"57C"},
+  {s:"I'd rather stay than going.",              unit:"57C"},
+  // 57D
+  {s:"I'd rather you drive.",                    unit:"57D"},
+  {s:"I'd rather you drove.",                    unit:"57D"},
+  {s:"I'd rather he do it today.",               unit:"57D"},
+  {s:"I'd rather he does it today.",             unit:"57D"},
+  {s:"Would you rather I tell her?",             unit:"57D"},
 ];
 
-let stats={total:0,ok:0,err:0}, history=[];
-
-(function buildChips(){
-  const area=document.getElementById('chip-area');
-  EXAMPLES.slice(0,8).forEach(ex=>{
-    const c=document.createElement('span');
-    c.className='chip';c.textContent=ex;
-    c.onclick=()=>{document.getElementById('inputSentence').value=ex};
-    area.appendChild(c);
-  });
-})();
-
-(function initBatch(){
-  EXAMPLES.slice(0,4).forEach(ex=>addBatchRow(ex));
-})();
-
-function addBatchRow(val=''){
-  const list=document.getElementById('batchList');
-  const row=document.createElement('div');row.className='batch-row';
-  const inp=document.createElement('input');inp.type='text';inp.placeholder='문장을 입력하세요…';inp.value=val;
-  const del=document.createElement('button');del.className='del-btn';del.setAttribute('aria-label','삭제');
-  del.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
-  del.onclick=()=>row.remove();
-  row.appendChild(inp);row.appendChild(del);list.appendChild(row);
+/* ════════════════════════════════════════════════════════════════
+   문법 엔진
+════════════════════════════════════════════════════════════════ */
+function toGerund(base){
+  if(/ing$/.test(base)) return base;
+  if(/[^aeiouy]e$/.test(base)) return base.slice(0,-1)+'ing';
+  if(/[aeiou][bcdfghjklmnpqrstvz]$/.test(base)&&base.length>=3) return base+base.slice(-1)+'ing';
+  return base+'ing';
 }
-
-function switchTab(id,el){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.getElementById('panel-'+id).classList.add('on');
-}
+const PAST_MAP={drove:'drive',went:'go',did:'do',was:'be',were:'be',took:'take',came:'come',said:'say',got:'get',made:'make',knew:'know',told:'tell',gave:'give',found:'find',left:'leave',brought:'bring',kept:'keep',began:'begin',felt:'feel',ran:'run',ate:'eat',drank:'drink',wrote:'write',saw:'see',heard:'hear',spoke:'speak',thought:'think',bought:'buy',sold:'sell',sent:'send',spent:'spend',stood:'stand',chose:'choose',broke:'break',lost:'lose',met:'meet',paid:'pay',sat:'sit',slept:'sleep',swam:'swim',taught:'teach',won:'win',wore:'wear',woke:'wake',stayed:'stay',walked:'walk',called:'call',played:'play',worked:'work',talked:'talk',looked:'look',waited:'wait',moved:'move',turned:'turn',lived:'live',tried:'try',studied:'study',carried:'carry',stopped:'stop',dropped:'drop',planned:'plan',used:'use'};
+const THIRD_S=new Set(['does','goes','takes','comes','makes','knows','drives','stays','walks','works','plays','runs','eats','writes','sees','says','gets','calls','talks','looks','waits','moves','turns','lives','uses','tries','studies','carries','stops','drops','plans','reads','sends','spends','stands','breaks','loses','meets','pays','sits','sleeps','swims','teaches','wins','wears','wakes','hears','speaks','thinks','buys','sells','chooses','feels','keeps','begins','brings','finds','leaves','gives','tells']);
+function fromThird(v){return v.endsWith('oes')?v.replace('oes','o'):v.endsWith('ies')?v.replace('ies','y'):v.endsWith('es')?v.replace(/e?s$/,''):v.replace(/s$/,'')}
+const BARE_VERBS=['take','go','do','drive','walk','run','eat','drink','stay','leave','make','get','come','buy','sell','read','write','work','play','watch','listen','cycle','study','swim','teach','speak','think','choose','break','lose','meet','pay','sit','sleep','wear','wake','hear','send','spend','stand','understand','bring','keep','begin','feel','call','wait','move','turn','live','use','try','carry','stop','drop','plan','travel','visit','see','know','find','give','tell','help','start','finish','return'];
+const MODALS=new Set(['would','could','should','might','will','can','may','must','shall','need','dare']);
 
 function evaluateSentence(raw){
   const s=raw.trim(), lo=s.toLowerCase();
 
-  if(/\bi'?d\s+rather\s+to\s+[a-z]/i.test(lo)){
+  // [57C] I'd rather to VERB
+  if(/\bi'?d\s+rather\s+to\s+[a-z]/i.test(lo))
     return{ok:false,corrected:s.replace(/\b(rather)\s+to\s+/i,'$1 '),
-      explanation:"❌ Unit 57A: 'would rather' 뒤에는 to부정사 불가.\n'to'를 제거하고 동사원형만 쓰세요.\n\"I'd rather stay\" ✓ / \"I'd rather to stay\" ✗"};
+      explanation:"❌ Unit 57C: 'I'd rather' 뒤에는 to부정사 불가.\n동사원형만 써야 합니다.\n\"I'd rather stay\" ✓  /  \"I'd rather to stay\" ✗"};
+
+  // [57B] I'd prefer + -ing (단독)
+  if(/\bi'?d\s+prefer\s+[a-z]+ing\b(?!\s+to\b|\s+rather\b)/i.test(lo)){
+    const m=lo.match(/\bi'?d\s+prefer\s+([a-z]+ing)\b/i);
+    if(m){
+      const g=m[1];
+      const base=g.replace(/([bcdfghjklmnpqrstvwxyz])\1ing$/,'$1').replace(/([^aeiou])e?ing$/,(_, c)=>c).replace(/ing$/,'');
+      return{ok:false,corrected:s.replace(new RegExp('\\bprefer\\s+'+g+'\\b','i'),'prefer to '+(base||g)),
+        explanation:`❌ Unit 57B: 'would prefer' 뒤에는 to부정사를 씁니다 (동명사 불가).\n'I'd prefer ${g}' → 'I'd prefer to ${base||g}'`};
+    }
   }
 
-  const m57d=lo.match(/\bi'?d\s+rather\s+\b(you|he|she|they|we|it)\b\s+\b([a-z]+)\b/i);
+  // [57D] I'd rather SUBJECT VERB
+  const m57d=lo.match(/\bi'?d\s+rather\s+\b(you|he|she|they|we|it)\b\s+(not\s+)?([a-z]+)\b/i);
   if(m57d){
-    const verb=m57d[2];
-    const pastMap={drove:'drive',went:'go',did:'do',was:'be',were:'be',took:'take',came:'come',said:'say',got:'get',made:'make',knew:'know',told:'tell',gave:'give',found:'find',left:'leave',brought:'bring',kept:'keep',began:'begin',felt:'feel',stayed:'stay',walked:'walk',called:'call',ran:'run',ate:'eat',drank:'drink',wrote:'write',saw:'see'};
-    const thirdS=['does','goes','takes','comes','makes','knows','drives','stays','walks','works','plays','runs','eats','writes','sees','says','gets','calls','talks','looks'];
-    if(pastMap[verb]){
-      const base=pastMap[verb];
-      return{ok:false,corrected:s.replace(new RegExp('\\b'+verb+'\\b','i'),base),
-        explanation:`⚠️ Unit 57D 시험 단골 함정!\n"I'd rather somebody + 동사원형" 규칙에서\n과거형 '${verb}'는 오답 → 동사원형 '${base}'를 쓰세요.`};
-    }
-    if(thirdS.includes(verb)){
-      const base=verb.endsWith('oes')?verb.replace('oes','o'):verb.endsWith('es')?verb.replace(/e?s$/,''):verb.replace(/s$/,'');
-      return{ok:false,corrected:s.replace(new RegExp('\\b'+verb+'\\b','i'),base),
-        explanation:`⚠️ Unit 57D: 주어가 he/she여도 3인칭 단수형(-s/-es) 불가.\n"I'd rather he ${base}" 처럼 동사원형을 써야 합니다.`};
+    const verb=m57d[3];
+    if(!MODALS.has(verb)){
+      if(PAST_MAP[verb]){
+        const base=PAST_MAP[verb];
+        const corrected=s.replace(new RegExp('(rather\\s+(?:you|he|she|they|we|it)\\s+(?:not\\s+)?)'+verb+'\\b','i'),'$1'+base);
+        return{ok:false,corrected,
+          explanation:`⚠️ Unit 57D 시험 단골 함정!\n"I'd rather somebody + 동사원형(subjunctive)" 규칙.\n과거형 '${verb}'는 원어민 구어체에서 쓰이기도 하지만,\n영어문법1 수업 기준에서는 동사원형 '${base}'만 정답입니다.`};
+      }
+      if(THIRD_S.has(verb)){
+        const base=fromThird(verb);
+        const corrected=s.replace(new RegExp('(rather\\s+(?:you|he|she|they|we|it)\\s+(?:not\\s+)?)'+verb+'\\b','i'),'$1'+base);
+        return{ok:false,corrected,
+          explanation:`⚠️ Unit 57D: 주어가 he/she여도 3인칭 단수형(-s/-es) 불가.\n'${verb}' → '${base}' (동사원형)`};
+      }
     }
   }
 
-  const gti=lo.match(/\bprefer\s+\w+ing\s+to\s+(take|go|do|drive|walk|run|eat|drink|stay|leave|make|get|come|buy|read|write|work|play|watch|listen|cycle|study)\b/i);
+  // [57C] I'd rather A than -ing
+  const rThan=lo.match(/\bi'?d\s+rather\s+\S+\s+than\s+([a-z]+ing)\b/i);
+  if(rThan){
+    const g=rThan[1];
+    const base=g==='being'?'be':g.replace(/([bcdfghjklmnpqrstvwxyz])\1ing$/,'$1').replace(/([^aeiou])e?ing$/,(_, c)=>c).replace(/ing$/,'');
+    return{ok:false,corrected:s.replace(new RegExp('\\bthan\\s+'+g+'\\b','i'),'than '+(base||g.replace(/ing$/,''))),
+      explanation:`❌ Unit 57C: "I'd rather A than B"에서 than 뒤는 동사원형.\n'than ${g}' → 'than ${base||g.replace(/ing$/,'')}'`};
+  }
+
+  // [58C] prefer -ing to + bare-infinitive
+  const bareRe=new RegExp('\\bprefer\\s+\\w+ing\\s+to\\s+('+BARE_VERBS.join('|')+')\\b','i');
+  const gti=lo.match(bareRe);
   if(gti){
-    const bv=gti[1];
-    return{ok:false,corrected:s.replace(new RegExp('\\bto\\s+'+bv+'\\b','i'),'to '+bv+'ing'),
-      explanation:`❌ Unit 57B: "prefer A to B"의 'to'는 전치사.\n뒤에 동명사(-ing)가 와야 합니다.\n'to ${bv}' → 'to ${bv}ing'`};
+    const bv=gti[1], gerund=toGerund(bv);
+    return{ok:false,corrected:s.replace(new RegExp('\\bto\\s+'+bv+'\\b','i'),'to '+gerund),
+      explanation:`❌ Unit 58C: "prefer A to B"의 'to'는 전치사.\n뒤에 동명사(-ing)가 와야 합니다.\n'to ${bv}' → 'to ${gerund}'`};
   }
 
-  const rt=lo.match(/\bi'?d\s+rather\s+\w+\s+than\s+(\w+ing)\b/i);
-  if(rt){
-    const g=rt[1],base=g.replace(/ing$/,'');
-    return{ok:false,corrected:s.replace(new RegExp('\\bthan\\s+'+g+'\\b','i'),'than '+base),
-      explanation:`❌ Unit 58: "would rather A than B"에서\nthan 뒤에는 동사원형을 써야 합니다.\n'than ${g}' → 'than ${base}'`};
-  }
+  // [57A] prefer to do rather than to do
+  if(/\bprefer\s+to\s+\w+\s+rather\s+than\s+to\s+[a-z]/i.test(lo))
+    return{ok:false,corrected:s.replace(/\b(rather\s+than)\s+to\s+/i,'$1 '),
+      explanation:`❌ Unit 57A: "prefer to do rather than (do)"에서\n'than' 뒤의 'to'는 불필요합니다.\n'rather than to go' → 'rather than go'`};
 
-  const knownOk=[/\bi'?d\s+rather\s+not\b/i,/\bi'?d\s+rather\s+[a-z]+\s+than\s+[a-z]+\b/i,/\bi'?d\s+rather\s+(you|he|she|they|we)\s+[a-z]+\b/i,/\bprefer\s+\w+ing\s+to\s+\w+ing\b/i,/\bprefer\s+to\s+\w+\s+rather\s+than\s+[a-z]+\b/i,/\bwould\s+rather\s+[a-z]+\b/i,/\bprefer\s+\w+ing\b/i,/\bprefer\s+to\s+[a-z]+\b/i];
-  if(knownOk.some(p=>p.test(lo)))
+  // 정답 패턴
+  const OK=[
+    /\bi\s+prefer\s+to\s+[a-z]/i,
+    /\bi\s+prefer\s+[a-z]+ing\b/i,
+    /\bprefer\s+\w+ing\s+to\s+\w+ing\b/i,
+    /\bprefer\s+\w+ing\s+rather\s+than\s+\w+ing?\b/i,
+    /\bprefer\s+to\s+[a-z]+\s+rather\s+than\s+(?!to\b)[a-z]/i,
+    /\bprefer\s+\w+\s+to\s+\w+\b/i,
+    /\bi'?d\s+prefer\s+to\s+[a-z]/i,
+    /\bi'?d\s+prefer\s+to\s+.+\s+rather\s+than\s+(?!to\b)[a-z]/i,
+    /\bi'?d\s+rather\s+not\b/i,
+    /\bi'?d\s+rather\s+[a-z]+(?:\s+than\s+[a-z]+)?\b/i,
+    /\bi'?d\s+rather\s+(you|he|she|they|we|it)\s+(not\s+)?[a-z]+\b/i,
+    /\bwould\s+you\s+rather\s+i\s+[a-z]/i,
+  ];
+  if(OK.some(p=>p.test(lo)))
     return{ok:true,corrected:s,explanation:"✅ Units 57/58 기준에 맞는 올바른 문장입니다.\n시험장에서 자신 있게 쓰세요!"};
-  return{ok:null,corrected:s,explanation:"💡 Units 57–58 주요 트랩은 없는 것 같습니다.\n다른 문장도 테스트해 보세요."};
+
+  return{ok:null,corrected:s,explanation:"💡 Units 57–58 주요 트랩 패턴이 감지되지 않았습니다.\n다른 문장도 테스트해 보세요."};
 }
 
-function diffHtml(orig,corr){
-  if(orig.toLowerCase()===corr.toLowerCase()) return corr;
-  const ow=orig.split(/\s+/),cw=corr.split(/\s+/);
-  return cw.map((w,i)=>w.toLowerCase()!==(ow[i]||'').toLowerCase()?`<mark>${w}</mark>`:w).join(' ');
-}
+/* ════════════════════════════════════════════════════════════════
+   상태
+════════════════════════════════════════════════════════════════ */
+let stats={total:0,ok:0,err:0}, errorNotes=[];
 
 function updateStats(res){
-  stats.total++;
-  if(res.ok===true) stats.ok++;
-  else if(res.ok===false) stats.err++;
+  stats.total++; if(res.ok===true)stats.ok++; else if(res.ok===false)stats.err++;
   document.getElementById('s-total').textContent=stats.total;
   document.getElementById('s-ok').textContent=stats.ok;
   document.getElementById('s-err').textContent=stats.err;
@@ -398,95 +445,226 @@ function updateStats(res){
   bar.className='pbar'+(pct>=80?'':pct>=50?' w':' b');
 }
 
-function pushHistory(sent,res){
-  history.unshift({sent,res});
-  const list=document.getElementById('histList');
-  if(list.querySelector('.hist-empty')) list.innerHTML='';
-  const item=document.createElement('div');item.className='hist-item';
-  const dc=res.ok===true?'ok':res.ok===false?'err':'safe';
-  const tag=res.ok===true?'정답':res.ok===false?'오류':'안전';
-  item.innerHTML=`<div class="hdot ${dc}"></div><div class="hsent">${sent}</div><div class="htag">${tag}</div>`;
-  item.onclick=()=>{
-    document.getElementById('inputSentence').value=sent;
-    switchTab('single',document.querySelector('.tab'));
-    document.querySelector('.tab').classList.add('on');
-    showResult(sent,res);
-  };
-  list.insertBefore(item,list.firstChild);
+function addNote(sent,res){
+  if(res.ok!==false) return;
+  errorNotes.unshift({sent,res});
+  renderNotes();
+  const cnt=document.getElementById('note-count');
+  cnt.style.display='';cnt.textContent=errorNotes.length;
 }
 
-function showResult(input,res){
-  const card=document.getElementById('resultCard');
-  const st=document.getElementById('resultStatus');
-  st.className='rstatus';
-  if(res.ok===false){
-    st.classList.add('err');
-    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>오류 발견';
-  } else if(res.ok===true){
-    st.classList.add('ok');
-    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M20 6L9 17l-5-5"/></svg>정답';
-  } else {
-    st.classList.add('safe');
-    st.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>안전 구역';
+function renderNotes(){
+  const list=document.getElementById('noteList');
+  if(!errorNotes.length){list.innerHTML='<div class="note-empty">아직 오류 문장이 없습니다. 😊<br>예시 문장이나 직접 입력에서 검사해 보세요.</div>';return;}
+  list.innerHTML='';
+  errorNotes.forEach((n,i)=>{
+    const item=document.createElement('div');item.className='note-item';
+    item.innerHTML=`
+      <div class="note-head" onclick="toggleNote(this)">
+        <span class="note-num">#${errorNotes.length-i}</span>
+        <div class="note-sent">${n.sent}</div>
+        <span class="note-chev">▾</span>
+      </div>
+      <div class="note-body">
+        <div class="rblabel" style="margin-bottom:4px">교정 문장</div>
+        <div class="corrected" style="margin-bottom:.6rem">${diffHtml(n.sent,n.res.corrected)}</div>
+        <div class="explain">${n.res.explanation}</div>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+function toggleNote(h){
+  const b=h.nextElementSibling,c=h.querySelector('.note-chev');
+  b.classList.toggle('on');if(c)c.style.transform=b.classList.contains('on')?'rotate(180deg)':'';
+}
+function clearNotes(){
+  errorNotes=[];renderNotes();
+  const cnt=document.getElementById('note-count');cnt.style.display='none';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   예시 문장 패널 렌더
+════════════════════════════════════════════════════════════════ */
+function diffHtml(orig,corr){
+  if(orig.toLowerCase()===corr.toLowerCase()) return corr;
+  const ow=orig.split(/\s+/),cw=corr.split(/\s+/);
+  return cw.map((w,i)=>w.toLowerCase()!==(ow[i]||'').toLowerCase()?`<mark>${w}</mark>`:w).join(' ');
+}
+
+function statusHtml(res){
+  if(res.ok===false) return'<div class="rstatus err">오류 발견</div>';
+  if(res.ok===true)  return'<div class="rstatus ok">정답</div>';
+  return'<div class="rstatus safe">안전 구역</div>';
+}
+
+function buildExamples(){
+  const grid=document.getElementById('exGrid');
+  EXAMPLES.forEach(ex=>{
+    const res=evaluateSentence(ex.s);
+    const item=document.createElement('div');item.className='ex-item';
+    // head: 결과 도트 색으로 힌트 (border-left)
+    const borderCol=res.ok===false?'#fca5a5':res.ok===true?'#86efac':'#cbd5e1';
+    item.style.borderColor=borderCol;
+    item.innerHTML=`
+      <div class="ex-head" onclick="toggleEx(this,${EXAMPLES.indexOf(ex)})">
+        <div class="ex-sent">${ex.s}</div>
+        <span class="ex-arrow">▾</span>
+      </div>
+      <div class="ex-body" id="exb-${EXAMPLES.indexOf(ex)}">
+        ${statusHtml(res)}
+        <div class="rblabel" style="margin-bottom:4px">교정 문장</div>
+        <div class="corrected" style="margin-bottom:.6rem">${diffHtml(ex.s,res.corrected)}</div>
+        <div class="explain">${res.explanation}</div>
+        <div class="ex-rule-ref">ref: Unit ${ex.unit}</div>
+      </div>`;
+    grid.appendChild(item);
+  });
+}
+buildExamples();
+
+function toggleEx(head,idx){
+  // 처음 열릴 때 통계 카운트
+  const body=document.getElementById('exb-'+idx);
+  const isFirstOpen=!body.dataset.counted;
+  if(!body.classList.contains('on')&&isFirstOpen){
+    const res=evaluateSentence(EXAMPLES[idx].s);
+    updateStats(res);addNote(EXAMPLES[idx].s,res);
+    body.dataset.counted='1';
   }
-  document.getElementById('correctedSentence').innerHTML=diffHtml(input,res.corrected);
-  document.getElementById('koreanExplanation').textContent=res.explanation;
-  card.classList.add('on');
+  body.classList.toggle('on');
+  const chev=head.querySelector('.ex-arrow');
+  if(chev)chev.style.transform=body.classList.contains('on')?'rotate(180deg)':'';
 }
 
+/* ════════════════════════════════════════════════════════════════
+   직접 입력 패널
+════════════════════════════════════════════════════════════════ */
 function checkGrammar(){
   const input=document.getElementById('inputSentence').value.trim();
-  if(!input) return;
+  if(!input)return;
   const btn=document.getElementById('checkBtn'),sc=document.getElementById('scanning'),card=document.getElementById('resultCard');
   card.classList.remove('on');sc.classList.add('on');btn.disabled=true;
   setTimeout(()=>{
     sc.classList.remove('on');btn.disabled=false;
     const res=evaluateSentence(input);
-    updateStats(res);pushHistory(input,res);showResult(input,res);
-  },750);
+    updateStats(res);addNote(input,res);
+    const st=document.getElementById('resultStatus');
+    st.className='rstatus';
+    if(res.ok===false){st.classList.add('err');st.textContent='오류 발견';}
+    else if(res.ok===true){st.classList.add('ok');st.textContent='정답';}
+    else{st.classList.add('safe');st.textContent='안전 구역';}
+    document.getElementById('correctedSentence').innerHTML=diffHtml(input,res.corrected);
+    document.getElementById('koreanExplanation').textContent=res.explanation;
+    card.classList.add('on');
+  },700);
 }
+document.getElementById('inputSentence').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey)checkGrammarAI()});
 
-function checkBatch(){
-  const inputs=[...document.querySelectorAll('#batchList input')].map(i=>i.value.trim()).filter(Boolean);
-  if(!inputs.length) return;
-  const btn=document.getElementById('batchBtn');btn.disabled=true;
-  const container=document.getElementById('batchResults');container.style.display='flex';container.innerHTML='';
-  setTimeout(()=>{
-    btn.disabled=false;
-    inputs.forEach(sent=>{
-      const res=evaluateSentence(sent);updateStats(res);pushHistory(sent,res);
-      const dc=res.ok===true?'ok':res.ok===false?'err':'safe';
-      const tag=res.ok===true?'정답':res.ok===false?'오류':'안전';
-      const item=document.createElement('div');item.className='br-item';
-      item.innerHTML=`
-        <div class="br-head" onclick="toggleBR(this)">
-          <div class="hdot ${dc}" style="flex-shrink:0;margin-top:0"></div>
-          <div class="br-sent">${sent}</div>
-          <span class="br-badge ${dc}">${tag}</span>
-          <span class="br-chev">▾</span>
-        </div>
-        <div class="br-body">
-          <div class="rblabel" style="margin-bottom:4px">교정 문장</div>
-          <div class="br-corrected">${diffHtml(sent,res.corrected)}</div>
-          ${res.explanation}
-        </div>`;
-      container.appendChild(item);
+/* ════════════════════════════════════════════════════════════════
+   Claude API 문법 검사
+════════════════════════════════════════════════════════════════ */
+const SYSTEM_PROMPT=`You are a grammar checker specialized in English Grammar in Use Units 57–58 (prefer and would rather / Preposition + -ing).
+
+UNIT 57 RULES:
+A. prefer to do / prefer doing (general preference) — both OK
+   prefer doing to doing — "to" is a preposition → gerund required after it
+   prefer doing rather than (doing) — both forms OK
+   prefer to do rather than (do) — no "to" after "rather than"
+B. would prefer to do (specific situation) — NOT would prefer doing
+   would prefer to do rather than (do)
+C. I'd rather do — NOT I'd rather to do
+   I'd rather not do
+   I'd rather do A than do B — both verbs must be base form
+D. I'd rather somebody DO — the primary rule is subjunctive = base form.
+   In this course (영어문법1), ONLY the base form is accepted as correct.
+   Past tense (e.g. "drove") is technically used in informal/spoken English but is treated as INCORRECT in this course.
+   3rd person -s form is always incorrect regardless of context.
+   e.g. "I'd rather you drive" ✓ / "I'd rather you drove" ✗ (course standard) / "I'd rather he drives" ✗
+   When you detect past tense after "I'd rather + subject", mark it as error and explain:
+   - base form is the course standard (교재 및 수업 기준)
+   - past tense is used informally in native speech but NOT accepted in 영어문법1
+
+UNIT 58C RULE:
+When "to" is a preposition, the following verb must end in -ing.
+e.g. "I prefer driving to taking" ✓ / "I prefer driving to take" ✗
+
+TASK: Analyze the given sentence strictly by the above rules.
+Respond ONLY with a valid JSON object, no markdown, no explanation outside JSON:
+{
+  "verdict": "correct" | "error" | "unknown",
+  "corrected": "<corrected sentence, same as input if no error>",
+  "unit": "<e.g. 57D or 58C or null>",
+  "explanation_ko": "<Korean explanation, 2–4 sentences. If error, clearly state the rule violated and show correct form. If correct, briefly confirm which rule applies.>"
+}`;
+
+async function checkGrammarAI(){
+  const input=document.getElementById('inputSentence').value.trim();
+  if(!input) return;
+  const btn=document.getElementById('checkBtn'),sc=document.getElementById('scanning'),card=document.getElementById('resultCard');
+  card.classList.remove('on'); sc.classList.add('on'); btn.disabled=true;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:SYSTEM_PROMPT,
+        messages:[{role:'user',content:`Check this sentence: "${input}"`}]
+      })
     });
-    container.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },900);
+    const data=await resp.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const clean=raw.replace(/```json|```/g,'').trim();
+    const result=JSON.parse(clean);
+
+    sc.classList.remove('on'); btn.disabled=false;
+
+    // verdict → ok 변환
+    const ok = result.verdict==='correct' ? true : result.verdict==='error' ? false : null;
+    const res={ok, corrected:result.corrected||input, explanation:result.explanation_ko||''};
+
+    // 통계 + 오답노트
+    updateStats(res); addNote(input,res);
+
+    // UI 렌더
+    const st=document.getElementById('resultStatus');
+    st.className='rstatus';
+    if(ok===false){st.classList.add('err');st.textContent='오류 발견';}
+    else if(ok===true){st.classList.add('ok');st.textContent='정답';}
+    else{st.classList.add('safe');st.textContent='판단 보류';}
+
+    document.getElementById('correctedSentence').innerHTML=diffHtml(input,res.corrected);
+    document.getElementById('koreanExplanation').textContent=res.explanation;
+    card.classList.add('on');
+
+  } catch(err){
+    sc.classList.remove('on'); btn.disabled=false;
+    // API 실패 시 기존 로직으로 폴백
+    const res=evaluateSentence(input);
+    updateStats(res); addNote(input,res);
+    const st=document.getElementById('resultStatus');
+    st.className='rstatus';
+    if(res.ok===false){st.classList.add('err');st.textContent='오류 발견';}
+    else if(res.ok===true){st.classList.add('ok');st.textContent='정답';}
+    else{st.classList.add('safe');st.textContent='안전 구역';}
+    document.getElementById('correctedSentence').innerHTML=diffHtml(input,res.corrected);
+    document.getElementById('koreanExplanation').textContent=res.explanation+'\n(⚠️ AI 연결 실패 — 기본 로직으로 판단)';
+    card.classList.add('on');
+  }
 }
 
-function toggleBR(h){
-  const body=h.nextElementSibling,chev=h.querySelector('.br-chev');
-  body.classList.toggle('on');
-  if(chev) chev.style.transform=body.classList.contains('on')?'rotate(180deg)':'';
+/* ════════════════════════════════════════════════════════════════
+   탭 전환
+════════════════════════════════════════════════════════════════ */
+function switchTab(id,el){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
 }
-
-function clearHistory(){
-  history=[];document.getElementById('histList').innerHTML='<div class="hist-empty">아직 검사한 문장이 없습니다.</div>';
-}
-
-document.getElementById('inputSentence').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey) checkGrammar()});
 </script>
 </body>
 </html>
