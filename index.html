@@ -112,6 +112,7 @@ textarea::placeholder{color:#bbb}
   <button class="tab"    onclick="switchTab('notes',this)"><span class="tnum">❌</span>오답노트<span class="note-count" id="note-count" style="display:none">0</span></button>
 </div>
 
+<!-- PANEL 1: 규칙 가이드 -->
 <div class="panel on" id="panel-guide">
   <div class="card">
     <div class="clabel">Unit 57 · prefer and would rather</div>
@@ -238,6 +239,7 @@ textarea::placeholder{color:#bbb}
   </div>
 </div>
 
+<!-- PANEL 2: 예시 문장 -->
 <div class="panel" id="panel-examples">
   <div class="card">
     <div class="clabel">예시 문장 — 클릭해서 정답·오류 확인</div>
@@ -245,6 +247,7 @@ textarea::placeholder{color:#bbb}
   </div>
 </div>
 
+<!-- PANEL 3: 직접 입력 -->
 <div class="panel" id="panel-input">
   <div class="card">
     <div class="clabel">직접 입력</div>
@@ -273,6 +276,7 @@ textarea::placeholder{color:#bbb}
   </div>
 </div>
 
+<!-- PANEL 4: 오답노트 -->
 <div class="panel" id="panel-notes">
   <div class="card">
     <div class="clabel" style="margin-bottom:0;display:flex;align-items:center">
@@ -285,53 +289,40 @@ textarea::placeholder{color:#bbb}
 
 </div>
 <script>
-/* ── 예시 문장 (교재 전체 예문 기반 + 킬러 트랩 추가) ── */
+/* ── 예시 문장 (최종 핵심 정예 예문) ── */
 const EXAMPLES=[
-  // 58B
-  {s:"She made herself sick by not eating well.",      unit:"58B"},
-  {s:"She made herself sick not by eating well.",      unit:"58B"},
-  // 57A
-  {s:"I prefer living in the country.",                unit:"57A"},
-  {s:"I prefer to live in the country.",               unit:"57A"},
-  {s:"I prefer this coat to the other one.",           unit:"57A"},
-  {s:"I prefer driving to taking the train.",          unit:"57A"},
-  {s:"I prefer driving to take the train.",            unit:"57A"},
-  {s:"I prefer driving rather than taking the train.", unit:"57A"},
-  {s:"I prefer to drive rather than take the train.",  unit:"57A"},
-  {s:"I prefer to drive rather than to take the train.", unit:"57A"},
-  {s:"Sarah prefers to live in the country rather than in a city.", unit:"57A"},
-  // 57B
-  {s:"I'd prefer to drive.",                           unit:"57B"},
-  {s:"I'd prefer driving.",                            unit:"57B"},
-  {s:"I'd prefer to stay at home rather than go to the movies.", unit:"57B"},
-  // 57C
+  // [Unit 57D] 킬러 트랩: would rather + 사람 + to부정사 (완벽 차단 확인용)
+  {s:"I'd rather you to drive home.",                  unit:"57D"}, 
+  
+  // [Unit 58C] 킬러 트랩: 복합 전치사 + 동사원형 (완벽 차단 및 feeling 정상스펠링 확인용)
+  {s:"Amy went to work in spite of feel sick.",        unit:"58C"},  
+  
+  // [Unit 57C] would rather + 동사원형 (정답 가이드)
   {s:"I'd rather drive.",                              unit:"57C"},
-  {s:"I'd rather to drive.",                           unit:"57C"},
-  {s:"I'd rather not go out tonight.",                 unit:"57C"},
-  {s:"I'd rather stay at home than go to the movies.", unit:"57C"},
+  
+  // [Unit 57C] would rather A than B 구조 트랩 (오답 감지 확인용)
   {s:"I'd rather stay than going.",                    unit:"57C"},
-  // 57D
-  {s:"I'd rather you drive.",                          unit:"57D"},
-  {s:"I'd rather you drove.",                          unit:"57D"},
-  {s:"I'd rather he do it today.",                     unit:"57D"},
-  {s:"I'd rather he does it today.",                   unit:"57D"},
-  {s:"Would you rather I tell her?",                   unit:"57D"},
-  {s:"I'd rather you to drive home.",                  unit:"57D"}, // 문장 C 추가
-  // 58C
-  {s:"I'm looking forward to seeing you.",             unit:"58C"},
-  {s:"I'm looking forward to see you.",                unit:"58C"},
-  {s:"They admitted to stealing the money.",           unit:"58C"},
-  {s:"Are you looking forward to going on vacation?",  unit:"58C"},
-  {s:"Amy went to work in spite of feel sick.",        unit:"58C"}  // 문장 G 추가
+  
+  // [Unit 58B] 전치사구 내부 부정어 위치 트랩 (오답 감지 확인용)
+  {s:"She made herself sick not by eating well.",      unit:"58B"},
+  
+  // [Unit 58C] look forward to + 동명사 (정답 가이드)
+  {s:"I'm looking forward to seeing you.",             unit:"58C"}
 ];
 
 /* ════════════════════════════════════════════════════════════════
-    문법 엔진 v2.5 — 교재 Unit 57/58 및 킬러 트랩 저격수
+    문법 엔진 v2.6 — 스펠링 예외처리 및 킬러 트랩 완벽 가동
 ════════════════════════════════════════════════════════════════ */
 
-/* gerund 스펠링 */
+/* gerund 스펠링 (feel -> feelling 버그 완벽 패치 버전) */
 function toGerund(base){
   if(/ing$/.test(base)) return base;
+  
+  // ee, oa, ea 등 장모음 조합 뒤에 자음이 오는 단어는 자음을 겹치지 않고 ing를 붙임
+  if(/[aeiou]{2}[bcdfghjklmnpqrstvz]$/.test(base)){
+    return base + 'ing';
+  }
+  
   if(/[^aeiouy]e$/.test(base)) return base.slice(0,-1)+'ing';
   if(/[aeiou][bcdfghjklmnpqrstvz]$/.test(base)&&base.length>=3) return base+base.slice(-1)+'ing';
   return base+'ing';
@@ -390,7 +381,7 @@ const MODALS=new Set(['would','could','should','might','will','can','may','must'
 function evaluateSentence(raw){
   const s=raw.trim(), lo=s.toLowerCase();
 
-  /* ── 🎯 [핵심 패치 1: 문장 C 완벽 처단] would rather + 주어 + to부정사 구조 차단 ── */
+  /* ── 🎯 [핵심 패치 1] would rather + 주어 + to부정사 구조 차단 ── */
   const ratherToMatch = lo.match(/\b(?:i'?d|i\s+would)\s+rather\s+(you|he|she|they|we|it|[a-z]+)\s+to\s+([a-z]+)\b/i);
   if(ratherToMatch){
     const person = ratherToMatch[1];
@@ -407,7 +398,7 @@ function evaluateSentence(raw){
     };
   }
 
-  /* ── 🎯 [핵심 패치 2: 문장 G 완벽 처단] 복합 전치사(in spite of / instead of) 뒤 동사원형 차단 ── */
+  /* ── 🎯 [핵심 패치 2] 복합 전치사(in spite of / instead of) 뒤 동사원형 차단 ── */
   if(lo.includes("in spite of") || lo.includes("instead of")){
     const prepMatch = lo.match(/(in spite of|instead of)\s+([a-z]+)\b/i);
     if(prepMatch){
@@ -460,8 +451,7 @@ function evaluateSentence(raw){
     const verb=m57d[3];
     if(!MODALS.has(verb)&&verb!=='not'){
       if(PAST_MAP[verb]){
-        // 교수님 가이드라인 보충자료 반영: Base form(원형)이 메인이지만 past form도 허용함을 반영하여 OK 처리 유도
-        // 57D 메인 규칙에서 오류를 내지 않고 하단 OK 배열로 흐르도록 우회 설정
+        // 과거형 정답 패턴 우회 허용
       } else if(THIRD_S.has(verb)){
         const base=fromThird(verb);
         const corrected=s.replace(new RegExp('\\b'+verb+'\\b(?![a-z])','i'),base);
@@ -509,35 +499,29 @@ function evaluateSentence(raw){
     return{ok:false,corrected:s.replace(/\b(rather\s+than)\s+to\s+/i,'$1 '),
       explanation:`❌ Unit 57A: "prefer to do rather than (do)"에서\n'than' 뒤의 'to'는 불필요합니다.\n'rather than to take' → 'rather than take'`};
 
-  /* ── 정답 패턴 (Murphy 교재 및 교수님 보충자료 교차 매칭) ── */
+  /* ── 정답 패턴 매칭 ── */
   const OK=[
-    // 57A
-    /\bprefer(?:s|red)?\s+to\s+[a-z]/i,                              // prefer to live
-    /\bprefer(?:s|red)?\s+[a-z]+ing\b/i,                              // prefer living
-    /\bprefer(?:s|red)?\s+\w+ing\s+to\s+\w+ing\b/i,                     // prefer driving to taking
-    /\bprefer(?:s|red)?\s+\w+ing\s+rather\s+than\s+(?!to\b)\w+/i,   // prefer driving rather than taking
-    /\bprefer(?:s|red)?\s+to\s+[a-z]+\s+rather\s+than\s+(?!to\b)[a-z]/i, // prefer to drive rather than take
-    /\bprefer(?:s|red)?\s+\w+\s+to\s+\w+\b/i,                       // prefer tea to coffee
-    // 57B
-    /\b(?:i'?d|i\s+would|[a-z]+\s+would)\s+prefer\s+to\s+[a-z]/i,  // I'd prefer to drive
-    /\b(?:i'?d|i\s+would)\s+prefer\s+to\s+.+\s+rather\s+than\s+(?!to\b)[a-z]/i, // I'd prefer to stay rather than go
-    // 57C
-    /\b(?:i'?d|i\s+would)\s+rather\s+not\b/i,                       // I'd rather not
-    /\b(?:i'?d|i\s+would)\s+rather\s+[a-z]+(?:\s+than\s+[a-z]+)?\b/i, // I'd rather stay / stay than go
-    // 57D (Subjunctive 동사원형 및 보충자료의 과거형 모두 정답 보장)
+    /\bprefer(?:s|red)?\s+to\s+[a-z]/i,
+    /\bprefer(?:s|red)?\s+[a-z]+ing\b/i,
+    /\bprefer(?:s|red)?\s+\w+ing\s+to\s+\w+ing\b/i,
+    /\bprefer(?:s|red)?\s+\w+ing\s+rather\s+than\s+(?!to\b)\w+/i,
+    /\bprefer(?:s|red)?\s+to\s+[a-z]+\s+rather\s+than\s+(?!to\b)[a-z]/i,
+    /\bprefer(?:s|red)?\s+\w+\s+to\s+\w+\b/i,
+    /\b(?:i'?d|i\s+would|[a-z]+\s+would)\s+prefer\s+to\s+[a-z]/i,
+    /\b(?:i'?d|i\s+would)\s+prefer\s+to\s+.+\s+rather\s+than\s+(?!to\b)[a-z]/i,
+    /\b(?:i'?d|i\s+would)\s+rather\s+not\b/i,
+    /\b(?:i'?d|i\s+would)\s+rather\s+[a-z]+(?:\s+than\s+[a-z]+)?\b/i,
     /\b(?:i'?d|i\s+would)\s+rather\s+(?:that\s+)?(you|he|she|they|we|it)\s+(?:not\s+)?[a-z]+\b/i,
-    /\bwould\s+(?:you|he|she|they|we)\s+rather\s+[a-z]+\s+[a-z]+/i, // Would you rather I tell
-    // 58B
-    /\bby\s+not\s+[a-z]+ing\b/i,                                     // by not eating
-    /\bby\s+[a-z]+ing\b/i,                                           // by reading
-    /\bwithout\s+[a-z]+ing\b/i,                                      // without stopping
-    /\bbefore\s+[a-z]+ing\b/i,                                       // before going
-    /\bafter\s+[a-z]+ing\b/i,                                        // after leaving
-    // 58C
-    /\blooking?\s+forward\s+to\s+[a-z]+ing\b/i,                     // looking forward to seeing
-    /\badmitted?\s+to\s+[a-z]+ing\b/i,                               // admitted to stealing
-    /\bin\s+spite\s+of\s+[a-z]+ing\b/i,                             // in spite of feeling
-    /\binstead\s+of\s+[a-z]+ing\b/i,                                // instead of sitting
+    /\bwould\s+(?:you|he|she|they|we)\s+rather\s+[a-z]+\s+[a-z]+/i,
+    /\bby\s+not\s+[a-z]+ing\b/i,
+    /\bby\s+[a-z]+ing\b/i,
+    /\bwithout\s+[a-z]+ing\b/i,
+    /\bbefore\s+[a-z]+ing\b/i,
+    /\bafter\s+[a-z]+ing\b/i,
+    /\blooking?\s+forward\s+to\s+[a-z]+ing\b/i,
+    /\badmitted?\s+to\s+[a-z]+ing\b/i,
+    /\bin\s+spite\s+of\s+[a-z]+ing\b/i,
+    /\binstead\s+of\s+[a-z]+ing\b/i,
   ];
   if(OK.some(p=>p.test(lo)))
     return{ok:true,corrected:s,
@@ -563,7 +547,6 @@ function updateStats(res){
 
 function addNote(sent,res){
   if(res.ok!==false)return;
-  // 중복 오답 방지
   if(errorNotes.some(n => n.sent.toLowerCase() === sent.toLowerCase())) return;
   errorNotes.unshift({sent,res});
   renderNotes();
@@ -643,14 +626,13 @@ function toggleEx(h,idx){
   const b=document.getElementById('exb-'+idx),c=h.querySelector('.ex-arrow');
   b.classList.toggle('on');if(c)c.style.transform=b.classList.contains('on')?'rotate(180deg)':'';
   
-  // 상태 바 업데이트를 위해 열어볼 때마다 스코어보드 누적
   const ex=EXAMPLES[idx];
   const res=evaluateSentence(ex.s);
   updateStats(res);
   if(!res.ok) addNote(ex.s, res);
 }
 
-/* ── 직접 입력 문법 검사 실행 로직 (API 제거 및 완전 오프라인 전환) ── */
+/* ── 직접 입력 문법 검사 실행 로직 ── */
 function checkGrammar(){
   const txt=document.getElementById('inputSentence').value;
   if(!txt.trim())return;
@@ -663,7 +645,6 @@ function checkGrammar(){
   scan.classList.add('on');
   card.classList.remove('on');
   
-  // API의 딜레이를 흉내 내어 스터디 카페 모티프 시각 효과 연출 (0.4초 후 로컬 스캔 즉시 완료)
   setTimeout(()=>{
     const res=evaluateSentence(txt);
     
